@@ -1,0 +1,28 @@
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: transporte_db
+    ports:
+      - "3307:3306"
+    volumes:
+      - transporte_mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -proot123 --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  api:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/transporte_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      DB_USER: root
+      DB_PASSWORD: root123
+    depends_on:
+      mysql:
+        condition: service_healthy
+volumes:
+  transporte_mysql:

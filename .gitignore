@@ -1,0 +1,33 @@
+
+# Maven
+target/
+*.class
+
+# IntelliJ IDEA
+.idea/
+*.iml
+out/
+
+# Visual Studio Code
+.vscode/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Variables de entorno y credenciales
+.env
+.env.*
+!.env.example
+application-local.properties
+application-prod.properties
+*.pem
+*.key
+
+# Logs
+*.log
+logs/
+
+# Archivos comprimidos
+*.zip
+*.rar
