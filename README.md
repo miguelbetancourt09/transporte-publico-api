@@ -77,19 +77,61 @@ docker run --rm -p 8080:8080 -e DB_URL="jdbc:mysql://host.docker.internal:3306/t
 
 Para conectarte desde un contenedor a MySQL del anfitrión con `host.docker.internal`, MySQL debe aceptar esa conexión y el usuario tener permisos adecuados. **No publiques MySQL local en Internet.**
 
-## Despliegue en Railway (Dockerfile)
+## Despliegue en la nube — Render y Aiven
 
-1. Sube esta carpeta a un repositorio de **GitHub** (no subas credenciales ni `.env`).
-2. En Railway crea un proyecto, añade **MySQL** y un servicio vinculado al repositorio de GitHub.
-3. Configura el servicio API para construir usando el `Dockerfile` incluido.
-4. En el servicio de la API añade variables `DB_URL`, `DB_USER`, `DB_PASSWORD` correspondientes a la instancia de MySQL de Railway. `DB_URL` debe ser una URL JDBC, por ejemplo `jdbc:mysql://HOST:3306/NOMBRE_DB?useSSL=false&allowPublicKeyRetrieval=true`, utilizando los valores reales que te proporcione Railway. Si MySQL ofrece una URL de tipo `mysql://`, **no la pongas literalmente** como `DB_URL`: conviértela a `jdbc:mysql://...` y usa por separado el usuario y la contraseña.
-5. Despliega y usa **Settings → Networking → Generate Domain** para obtener la dirección HTTPS pública.
-6. Prueba `https://TU-DOMINIO/api/rutas`. Añade el enlace real al apartado siguiente.
+La API REST de Transporte Público está desplegada en Render mediante Docker, utilizando MySQL de Aiven como base de datos en la nube.
 
-**Repositorio GitHub:** `PENDIENTE_DE_PUBLICAR`  
-**URL de despliegue:** `PENDIENTE_DE_DESPLEGAR`
+### Tecnologías utilizadas
 
-> Nota: `spring.jpa.hibernate.ddl-auto=update` es práctico para un proyecto académico. Para sistemas productivos conviene usar migraciones (Flyway/Liquibase) y permisos limitados en base de datos.
+- Java 17
+- Spring Boot 3.5.6
+- Spring Data JPA
+- MySQL 8.4
+- Docker
+- Render (despliegue de la API)
+- Aiven (base de datos MySQL)
+- GitHub (repositorio)
+- Postman (pruebas de endpoints)
+
+### Configuración del despliegue
+
+1. Se publicó el proyecto en GitHub.
+2. Se creó un servicio MySQL gratuito en Aiven.
+3. Se creó la base de datos `transporte_db`.
+4. Se conectó el repositorio GitHub con Render.
+5. Se seleccionó Docker como entorno de ejecución.
+6. Se configuraron las variables de entorno `DB_URL`, `DB_USER` y `DB_PASSWORD` en Render, sin almacenar las credenciales en GitHub.
+7. Se desplegó la aplicación y se verificó su funcionamiento.
+
+### URL pública
+
+**API:** https://transporte-publico-api-qj8u.onrender.com
+
+**Consultar rutas:**
+https://transporte-publico-api-qj8u.onrender.com/api/rutas
+
+**Consultar reservas:**
+https://transporte-publico-api-qj8u.onrender.com/api/reservas
+
+### Pruebas realizadas
+
+- Creación, consulta, actualización y eliminación de rutas y reservas en el entorno local.
+- Construcción de la imagen y ejecución de la API mediante Docker.
+- Despliegue exitoso de Spring Boot en Render.
+- Conexión a MySQL alojado en Aiven.
+- Creación de una ruta mediante POST desde Postman utilizando la URL pública.
+- Consulta de la ruta creada mediante GET.
+- Creación de una reserva asociada a una ruta existente mediante POST.
+- Consulta de la reserva mediante GET.
+
+El servicio web utiliza el plan gratuito de Render, por lo que puede suspenderse temporalmente después de un período de inactividad. La primera solicitud tras la suspensión puede tardar más de lo habitual.
+
+### Enlaces de entrega
+
+**Repositorio GitHub:** Agregar aquí el enlace del repositorio.
+
+**Despliegue funcionando:** https://transporte-publico-api-qj8u.onrender.com/api/rutas
+
 
 ## Evidencias sugeridas para la entrega
 
